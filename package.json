@@ -1,0 +1,22 @@
+{
+  "name": "rando",
+  "version": "1.0.0",
+  "description": "chat app",
+  "main": "index.js",
+  "scripts": {
+    "test": "index.js",
+    "build": "tsc -p tsconfig.json",
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "fastify": "^4.24.3",
+    "mongoose": "^8.0.0"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^18.2.2",
+    "@types/node": "^20.8.10",
+    "typescript": "^5.2.2"
+  }
+}
