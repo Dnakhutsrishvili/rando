@@ -1,12 +1,10 @@
 import fastify from 'fastify';
 
 const server = fastify();
+import userRoute from './users/user.routes' //  here will trigger the type augmentation.
 
-server.get('/chatRoom',async (request, reply) => {
- let username = request;
-console.log(
-  username
-)})
+server.register(userRoute)
+
 server.listen({ port: 8080 }, (err, address) => {
   if (err) {
     console.error(err)

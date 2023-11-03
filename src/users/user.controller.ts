@@ -14,4 +14,3 @@ export default async function run() {
   
     console.log(user.name); // 'bill@initech.com'
   }
-  
