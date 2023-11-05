@@ -12,9 +12,11 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/socket.io": "^3.0.2",
     "@withvoid/make-validation": "^1.0.5",
     "cors": "^2.8.5",
     "fastify": "^4.24.3",
+    "fastify-socket.io": "^5.0.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.0",
     "morgan": "^1.10.0",
