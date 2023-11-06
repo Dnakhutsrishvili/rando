@@ -7,7 +7,6 @@ export const createUser = async function (fastify, options) {
       name: faker.animal.fish(),
       connected: false,
     });
-    fastify.io.emit("connection", "this is message");
 
     await user.save();
     reply

@@ -8,8 +8,7 @@ import { connect } from "mongoose";
 
 function chatRoomRoutes(fastify, options, done) {
   fastify.get("/chat", async (request, reply) => {
-    //chatRoom.getRecentConversation
-    reply.send({});
+    reply.send({ message: "message sent" });
   });
 
   fastify.get("/:roomId", async (request, reply) => {
