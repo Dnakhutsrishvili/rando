@@ -1,3 +1,4 @@
+import fastifyWebsocket from "@fastify/websocket";
 import Message from "./message.model";
 
 export const CreateMessage = async function (fastify, options) {
@@ -29,15 +30,16 @@ export const getAllMessages = async function (fastify, options) {
 };
 
 export const getLiveMessages = async function (fastify, options) {
-  fastify.get("/live-message", { websocket: true }, (conn) => {
+  fastify.get("/live-message/:id", { websocket: true }, (conn, request) => {
     conn.socket.on("message", async (messages) => {
       try {
-        console.log(messages);
         const jsonMess = JSON.parse(messages);
         const message = new Message({
           text: jsonMess,
+          userId: request.params.id,
         });
         let saveMessage = await message.save();
+        // console.log(fastify.websocketServer.clients.size);
         fastify.websocketServer.clients.forEach((client) => {
           if (client.readyState === 1) {
             client.send(JSON.stringify(saveMessage));

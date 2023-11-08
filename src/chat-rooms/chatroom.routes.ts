@@ -1,33 +1,7 @@
-import { connect } from "mongoose";
-
-// .get('/', chatRoom.getRecentConversation)
-// .get('/:roomId', chatRoom.getConversationByRoomId)
-// .post('/initiate', chatRoom.initiate)
-// .post('/:roomId/message', chatRoom.postMessage)
-// .put('/:roomId/mark-read', chatRoom.markConversationReadByRoomId)
+import { chatRoom } from "./chatRoom.controller";
 
 function chatRoomRoutes(fastify, options, done) {
-  fastify.get("/chat", async (request, reply) => {
-    reply.send({ message: "message sent" });
-  });
-
-  fastify.get("/:roomId", async (request, reply) => {
-    //chatRoom.getConversationByRoomId
-    reply.send({});
-  });
-
-  fastify.post("/initiate", async (request, reply) => {
-    // .post('/initiate', chatRoom.initiate)
-
-    reply.send({});
-  });
-
-  fastify.post("/:roomId/message", async (request, reply) => {
-    // .post('/:roomId/message', chatRoom.postMessage)
-
-    reply.send({});
-  });
-
+  chatRoom(fastify, options);
   done();
 }
 

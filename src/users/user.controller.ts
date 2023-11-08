@@ -3,6 +3,8 @@ import User from "./user.model";
 
 export const createUser = async function (fastify, options) {
   fastify.get("/createUser", async (request, reply) => {
+    reply.header("Access-Control-Allow-Origin", "*");
+    reply.header("Access-Control-Allow-Methods", "GET");
     const user = new User({
       name: faker.animal.fish(),
       connected: false,
@@ -12,7 +14,7 @@ export const createUser = async function (fastify, options) {
     reply
       .code(200)
       .header("Content-Type", "application/json; charset=utf-8")
-      .send({ message: "user created" });
+      .send({ message: "user created", user });
   });
 };
 
