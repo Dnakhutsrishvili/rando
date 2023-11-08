@@ -1,17 +1,9 @@
-import {
-  createUser,
-  getUser,
-  connectUser,
-  getConnectedUsers,
-  deleteUser,
-} from "./user.controller";
+import { createUser, getUser, deleteUser } from "./user.controller";
 
 function userRoutes(fastify, options, done) {
-  createUser(fastify, options);
-  getUser(fastify, options);
-  connectUser(fastify, options);
-  getConnectedUsers(fastify, options);
-  deleteUser(fastify, options);
+  fastify.get("/user", createUser);
+  fastify.get("/user/:id", getUser);
+  fastify.delete("/user/:id", deleteUser);
   done();
 }
 

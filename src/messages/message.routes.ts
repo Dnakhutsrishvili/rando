@@ -5,8 +5,8 @@ import {
 } from "./message.controller";
 
 function messageRoutes(fastify, options, done) {
-  CreateMessage(fastify, options);
-  getAllMessages(fastify, options);
+  fastify.post("/message", CreateMessage);
+  fastify.get("/message", getAllMessages);
   getLiveMessages(fastify, options);
   done();
 }

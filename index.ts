@@ -22,7 +22,6 @@ server.register(websocket, {
   handle,
   options: { maxPayload: 1048576, clientTracking: true },
 });
-
 server.register(indexRoutes);
 server.register(userRoute);
 server.register(messageRoutes);
