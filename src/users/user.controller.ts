@@ -30,6 +30,6 @@ export const deleteUser = async function (request, reply) {
   const user = await User.findOneAndDelete({ _id: request.params.id });
   if (!user) throw { error: "No user with this id found" };
 
-  reply.code(200).header("Content-Type", "application/json; charset=utf-8");
+  reply.code(204).header("Content-Type", "application/json; charset=utf-8");
   reply.send({ message: "User Deleted" });
 };
