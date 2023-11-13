@@ -21,81 +21,72 @@ server.register(fastifyIO, {
   },
 });
 
-server.get("/", (req, reply) => {
-  // reply.header("Access-Control-Allow-Origin", "*");
-  // reply.header("Access-Control-Allow-Methods", "GET");
-  //@ts-ignore
-  server.io.emit("hello");
-});
-//@ts-ignore
 
 server.ready().then(() => {
   //@ts-ignore
-  server.io.on("connection", async (socket) => {
-    // const username = socket.handshake.auth.username;
+  const users = new Map();
+  //@ts-ignore
 
-    const users = [];
-    //@ts-ignore
-    for (let [id, socket] of server.io.of("/").sockets) {
-      users.push({
-        userID: id,
-        username: socket.username,
-        messages: [],
-      });
-      //@ts-ignore
+server.io.on('connection', (socket) => {
+  console.log('User connected');
 
-      console.log(users);
-    }
+  // Automatically assign a unique username
+  const username = `User${Date.now()}`;
+  users.set(socket.id, username);
+  socket.emit('assignedUsername', username);
 
-    var splitPairs = function (arr) {
-      var pairs = [];
-      for (var i = 0; i < arr.length; i += 2) {
-        if (arr[i + 1] !== undefined) {
-          pairs.push([arr[i], arr[i + 1]]);
-        } else {
-          pairs.push([arr[i]]);
-        }
+  console.log(users)
+  // Handle one-on-one chat initiation
+  socket.on('startChat', () => {
+
+    
+    let availableUsers = Array.from(users).filter(([id]) => id !== socket.id);
+ 
+
+
+    console.log(availableUsers,"avaliable users")
+    if (availableUsers.length > 0) {
+      const [targetSocketId, targetUsername] = availableUsers[Math.floor(Math.random() * availableUsers.length)];
+      const room = `${socket.id}-${targetSocketId}`;
+
+      // Notify the users about the chat initiation
+        //@ts-ignore
+      server.io.to(socket.id).to(targetSocketId).emit('chatStarted', { room, targetUsername });
+
+      // Join the unique room for the two users
+      if (!socket.rooms[room]) {
+        // not in the room
+        socket.join(room);
+        //@ts-ignore
+        server.io.sockets.sockets.get(targetSocketId).join(room);
+      } else {
+        // in the room
+        console.log("room occupied");
       }
-      return pairs;
-    };
+        //@ts-ignore
 
-    socket.emit("users", splitPairs(users));
-    console.log("client connected");
-  });
-  //@ts-ignore
-  server.io.use((socket, next) => {
-    const username = socket.handshake.auth.username;
-    if (!username) {
-      return next(new Error("invalid username"));
+      server.io.sockets.sockets.get(targetSocketId).join(room);
+    } else {
+      // Handle if there are no available users for chat
+      socket.emit('noAvailableUsers');
     }
-    socket.username = username;
-    next();
   });
-  //@ts-ignore
-  server.io.on("private message", ({ content, to }) => {
-    console.log(content);
-    console.log(to);
 
-    //@ts-ignore
-    server.io.to(to).emit("private message", {
-      content,
+  // Handle incoming private messages
+  socket.on('privateMessage', ({ room, message }) => {
       //@ts-ignore
-      from: server.io.id,
-    });
+
+    server.io.to(room).emit('privateMessage', { sender: users.get(socket.id), message });
+  });
+
+  // Handle disconnection
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+    // Remove user from the users map
+    users.delete(socket.id);
   });
 });
-
-// function handle(conn, req) {
-//   conn.pipe(conn); // creates an echo server
-// }
-// server.register(cors, {
-//   hook: "preHandler",
-// });
-//@ts-ignore
-// server.register(websocket, {
-//   handle,
-//   options: { maxPayload: 1048576, clientTracking: true },
-// });
+})
 server.register(userRoute);
 server.register(messageRoutes);
 server.register(chatRoomRoutes);
