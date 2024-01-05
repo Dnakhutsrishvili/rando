@@ -7,7 +7,9 @@ const server = fastify();
 server.register(fastifyIO, {
   cors: {
     origin: "*",
-    methods:['GET'],
+    methods:['GET','POST'],
+    allowedHeaders: ["my-custom-header"],
+    credentials: true
   },
 });
 
