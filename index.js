@@ -1,5 +1,6 @@
-import fastify from "fastify";
-import fastifyIO from "fastify-socket.io";
+const fastify=require("fastify");
+const fastifyIO=require("fastify-socket.io");
+
 
 
 const server = fastify();
