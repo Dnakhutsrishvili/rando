@@ -6,7 +6,8 @@ const fastifyIO=require("fastify-socket.io");
 const server = fastify();
 server.register(fastifyIO, {
   cors: {
-    origin: "*"
+    origin: "*",
+    methods:['GET'],
   },
 });
 
@@ -72,7 +73,7 @@ server.io.on('connection', (socket) => {
 });
 });
 })
-server.listen({ port: 8080, host: '0.0.0.0' }, (err) => {
+server.listen({ port: 8080||env.PORT, host: '0.0.0.0' }, (err) => {
   if (err) {
     console.error(err);
     process.exit(1);
